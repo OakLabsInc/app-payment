@@ -1,0 +1,44 @@
+{
+  "name": "payment-demo-application",
+  "version": "0.0.1",
+  "description": "Oak Demo Payment app for OakOS v5.0.x",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node_modules/.bin/oak .",
+    "dev": "env $(cat .env | grep -v '#' | xargs) npm start",
+    "rebuild": "rm -rf node_modules/ package-lock.json && npm i && node_modules/.bin/oak-rebuild $(pwd)",
+    "test": "exit 0;"
+  },
+  "engines": {
+    "node": "10.15.3"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/OakLabsInc/app-payment.git"
+  },
+  "author": "Richard Joffray <richard@joffray.com>",
+  "license": "Apache 2",
+  "bugs": {
+    "url": "https://github.com/OakLabsInc/app-payment/issues"
+  },
+  "homepage": "https://github.com/OakLabsInc/app-payment#readme",
+  "devDependencies": {
+    "oak": "~5.0.10"
+  },
+  "dependencies": {
+    "@oaklabs/platform": "~3.0.0",
+    "angular": "~1.7.2",
+    "angular-animate": "~1.7.2",
+    "angular-aria": "~1.7.5",
+    "angular-material": "^1.1.22",
+    "angular-messages": "~1.7.5",
+    "body-parser": "^1.19.0",
+    "dotenv": "^8.2.0",
+    "express": "~4.16.3",
+    "lodash": "^4.17.11",
+    "pug": "~2.0.3",
+    "stylus": "~0.54.5",
+    "uuid": "^3.3.2"
+  },
+  "private": true
+}

@@ -1,0 +1,29 @@
+html
+  head
+    title Payment Demo
+    link(href='/css/angular-material.css', rel='stylesheet', type='text/css')
+    link(href='/css/index.css', rel='stylesheet', type='text/css')
+
+  body(ng-app='demoApp')
+    div(ng-controller='appController' ng-cloak)
+      md-content(layout="column" layout-align="center center" layout-fill)
+        //- pre {{cart | json}}
+        md-input-container
+          label Cart Total
+          input(ng-model="cart.total" ng-change="calculateTotal(cart.taxRate, cart.total)")
+        md-input-container
+          label Tax Rate
+          input(ng-model="cart.taxRate" ng-change="calculateTotal(cart.taxRate, cart.total)")
+        md-input-container
+          label Tax
+          input(readonly ng-model="cart.tax" ng-value="cart.tax | number:2")
+        md-input-container
+          label Total
+          input(readonly ng-model="cart.grandTotal" ng-value="cart.grandTotal | number:2")
+        md-button.md-primary.md-raised(ng-click="sendCart") Send Cart
+    script(src='/vendor/angular/angular.js')
+    script(src='/vendor/angular-aria/angular-aria.js') 
+    script(src='/vendor/angular-animate/angular-animate.js') 
+    script(src='/vendor/angular-messages/angular-messages.js') 
+    script(src='/vendor/angular-material/angular-material.js')
+    script(src='/js/index.js') 
