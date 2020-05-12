@@ -20,7 +20,7 @@ html
         md-input-container
           label Total
           input(readonly ng-model="cart.grandTotal" ng-value="cart.grandTotal | number:2")
-        md-button.md-primary.md-raised(ng-click="sendCart") Send Cart
+        md-button.md-primary.md-raised(ng-click="sendCart(cart)") Send Cart
     script(src='/vendor/angular/angular.js')
     script(src='/vendor/angular-aria/angular-aria.js') 
     script(src='/vendor/angular-animate/angular-animate.js') 

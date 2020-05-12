@@ -33,21 +33,15 @@ app.get('/', function (req, res) {
   res.render('index')
 })
 
-app.get('/send-cart', function (req, res) {
-    console.log(req)
+app.post('/sendCart', function (req, res) {
+    console.log(req.body)
     let paymentPort = process.env.PAYMENT_PORT || 9001
-    
     request.post(
-      `http://localhost:${paymentPort}`,
-      {
-        json: {
-          total: cartTotal,
-          tax: cartTax
-        }
-      },
+      `http://localhost:${paymentPort}`,req.body,
       (error, res, body) => {
         if (error) {
           console.error(error)
+          //res.json(req.body)
           return
         }
         console.log(`statusCode: ${res.statusCode}`)
