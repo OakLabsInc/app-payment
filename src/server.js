@@ -35,10 +35,7 @@ app.get('/', function (req, res) {
 
 app.get('/send-cart', function (req, res) {
     console.log(req)
-
-    let cartTotal = 20.20
-    let cartTax = cartTotal * .085
-    let paymentPort = process.env.paymentPort || 9001
+    let paymentPort = process.env.PAYMENT_PORT || 9001
     
     request.post(
       `http://localhost:${paymentPort}`,
