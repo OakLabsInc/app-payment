@@ -8,7 +8,7 @@ RUN npm install --production && npm cache clean --force
 
 COPY . /app
 
-CMD ["/app"]
+CMD ["/app/src/server.js"]
 
 ENV TZ=America/Los_Angeles \
     PAYMENT_PORT=9001 \
