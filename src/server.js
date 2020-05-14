@@ -4,6 +4,7 @@ const request = require('request')
 const express = require('express')
 const stylus = require('stylus')
 const bodyParser = require('body-parser')
+const axios = require('axios')
 
 const { join } = require('path')
 const _ = require('lodash')
@@ -36,18 +37,17 @@ app.get('/', function (req, res) {
 app.post('/sendCart', function (req, res) {
     console.log(req.body)
     let paymentPort = process.env.PAYMENT_PORT || 9001
-    request.post(
-      `http://localhost:${paymentPort}`,req.body,
-      (error, res, body) => {
-        if (error) {
-          console.error(error)
-          //res.json(req.body)
-          return
-        }
+    axios.post(`http://localhost:${paymentPort}`, req.body)
+      .then(res => {
         console.log(`statusCode: ${res.statusCode}`)
-        console.log(body)
-      }
-    )
+        //console.log(res)
+      })
+      .catch(error => {
+        console.error(error)
+      })
+  
+
+    
 })
 
 
