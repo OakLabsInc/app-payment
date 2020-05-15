@@ -1,6 +1,5 @@
 const oak = require('oak')
 oak.catchErrors()
-const request = require('request')
 const express = require('express')
 const stylus = require('stylus')
 const bodyParser = require('body-parser')
