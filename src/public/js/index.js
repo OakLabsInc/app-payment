@@ -21,7 +21,8 @@ app.controller('appController', function ($log, $sce, $timeout, $mdDialog, $scop
   $scope.cart.taxRate = .085
 
   $scope.paymentSent = false
-  $scope.paymentStatus = "Transaction In Progress"
+  let paymentStatus = "Transaction In Progress" 
+  $scope.paymentStatus = paymentStatus
 
   $scope.sendCart = function(cart, ev) {
     $scope.paymentSent = true
@@ -60,6 +61,7 @@ app.controller('appController', function ($log, $sce, $timeout, $mdDialog, $scop
 
   $scope.closePaymentStatus = function(){
     $mdDialog.hide()
+    $scope.paymentStatus = paymentStatus
   }
   $scope.calculateTotal()
   oak.ready()
