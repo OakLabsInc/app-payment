@@ -46,7 +46,7 @@ app.post('/sendCart', function (req, res) {
       },
       "terminalIp": terminalIp
     }
-    axios.post(`http://192.168.86.207:${paymentPort}`, request)
+    axios.post(`http://localhost:${paymentPort}`, request)
       .then(res => {
         console.log(`statusCode: ${res.statusCode}`)
         console.log(res)
