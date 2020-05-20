@@ -5,7 +5,7 @@ html
     link(href='/css/index.css', rel='stylesheet', type='text/css')
 
   body(ng-app='demoApp')
-    div(ng-controller='appController' ng-cloak)
+    div(ng-controller='appController as ctl' ng-cloak)
       md-content(layout="column" layout-align="center center" layout-fill)
         //- pre {{cart | json}}
         md-input-container
@@ -20,7 +20,17 @@ html
         md-input-container
           label Total
           input(readonly ng-model="cart.grandTotal" ng-value="cart.grandTotal | number:2")
-        md-button.md-primary.md-raised(ng-click="sendCart(cart)") Send Cart
+        md-button.md-primary.md-raised(ng-click="sendCart(cart, $event)") Send Cart
+      .invisible
+        .md-dialog-container#transactionInProgress
+          md-dialog(flex=80)
+            md-dialog-content.md-dialog-content(layout='column' layout-align="center center")
+               h2.md-headline {{paymentStatus}}
+            md-dialog-actions
+              button.md-button.md-primary.md-raised(ng-click='closePaymentStatus()' ng-disabled="paymentSent") Close
+              button.md-button.md-primary.md-raised(ng-click='printReceipt()' ng-disabled="paymentSent") Print Receipt
+
+              
     script(src='/vendor/angular/angular.js')
     script(src='/vendor/angular-aria/angular-aria.js') 
     script(src='/vendor/angular-animate/angular-animate.js') 

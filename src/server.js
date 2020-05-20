@@ -36,6 +36,7 @@ app.get('/', function (req, res) {
 app.post('/sendCart', function (req, res) {
     //console.log(req.body)
     let paymentPort = process.env.PAYMENT_PORT || 9001
+    let paymentHost = process.env.PAYMENT_HOST || "localhost"
     let terminalIp = process.env.TERMINAL_IP || "192.168.86.245"
     let request = {
       "cart": {
@@ -46,15 +47,20 @@ app.post('/sendCart', function (req, res) {
       },
       "terminalIp": terminalIp
     }
-    axios.post(`http://localhost:${paymentPort}`, request)
+    console.log(request)
+    axios.post(`http://${paymentHost}:${paymentPort}`, request)
       .then(res => {
         console.log(`statusCode: ${res.statusCode}`)
-        console.log(res)
+        console.log("paymentResponse: ", res)
+        window.send('paymentResponse', res)
       })
       .catch(error => {
         console.error(error)
       })
-  
+  res.json({
+    message: "Object Sent to payment component",
+    cart: request
+  })
 
     
 })
