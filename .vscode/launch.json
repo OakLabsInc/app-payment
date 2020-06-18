@@ -12,10 +12,10 @@
       ],
       "env":{
         "PORT": "9000",
-        "PAYMENT_PORT": "9001",
+        "PAYMENT_PORT": "8003",
         "TZ": "America/Los_Angeles",
-        "TERMINAL_IP": "192.168.86.245",
-        "PAYMENT_HOST": "192.168.86.207"
+        "TERMINAL_IP": "192.168.86.43",
+        "PAYMENT_HOST": "192.168.86.28"
       }
     }
   ]

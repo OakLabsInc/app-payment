@@ -28,7 +28,7 @@ html
                h2.md-headline {{paymentStatus}}
             md-dialog-actions
               button.md-button.md-primary.md-raised(ng-click='closePaymentStatus()' ng-disabled="paymentSent") Close
-              button.md-button.md-primary.md-raised(ng-click='printReceipt()' ng-disabled="paymentSent") Print Receipt
+              button.md-button.md-primary.md-raised(ng-click='printReceipt(cart, $event)' ng-disabled="paymentSent") Print Receipt
 
               
     script(src='/vendor/angular/angular.js')

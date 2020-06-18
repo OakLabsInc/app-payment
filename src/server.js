@@ -33,11 +33,17 @@ app.get('/', function (req, res) {
   res.render('index')
 })
 
+app.get('/env', function(req, res) {
+  let env = {...process.env}
+  console.log("ENV: ", env)
+  res.json(env)
+})
+
 app.post('/sendCart', function (req, res) {
     //console.log(req.body)
-    let paymentPort = process.env.PAYMENT_PORT || 9001
-    let paymentHost = process.env.PAYMENT_HOST || "localhost"
-    let terminalIp = process.env.TERMINAL_IP || "192.168.86.245"
+    let paymentPort = process.env.PAYMENT_PORT || 8003
+    let paymentHost = process.env.HOST || "localhost"
+    let terminalIp = process.env.TERMINAL_IP || "192.168.86.43"
     let request = {
       "cart": {
         "total": req.body.total.toString(),
@@ -47,7 +53,7 @@ app.post('/sendCart', function (req, res) {
       },
       "terminalIp": terminalIp
     }
-    console.log(request)
+    // console.log(request)
     axios.post(`http://${paymentHost}:${paymentPort}`, request)
       .then(res => {
         console.log(`statusCode: ${res.statusCode}`)
@@ -65,6 +71,29 @@ app.post('/sendCart', function (req, res) {
     
 })
 
+app.post('/printer-attributes', async function(req, res) {
+  let printers = await printer.getPrinterAttributes(printerName, function(name, ppd){
+    res.json({
+      message: "Sent To Printer",
+      data: {
+        ppd: ppd,
+        name: name
+      }
+    })
+  })
+})
+
+app.post('/print-receipt', async function(req, res) {
+  console.log("Print request", req.body)
+  req.body.service = service
+  
+  let receipt = await printer.printReceipt(printerName, req.body, function(data){
+    res.json({
+      message: "Receipt Sent To Printer",
+      data: data
+    })
+  })
+})
 
 async function loadWindow () {
     console.log({
@@ -89,5 +118,7 @@ async function loadWindow () {
         }
       ]
     })
+
+    window.send('env-sent',{...process.env})
 
   }

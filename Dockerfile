@@ -11,5 +11,6 @@ COPY . /app
 CMD ["/app/src/server.js"]
 
 ENV TZ=America/Los_Angeles \
-    PAYMENT_PORT=9001 \
+    PAYMENT_PORT=8003 \
+    TERMINAL_IP=192.168.86.43 \
     PORT=9000

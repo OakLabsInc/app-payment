@@ -37,7 +37,7 @@ app.controller('appController', function ($log, $sce, $timeout, $mdDialog, $scop
     })
     $http({
       method: 'POST',
-      url: 'http://localhost:9000/sendCart',
+      url: `http://localhost:${$scope.env.PORT}/sendCart`,
       data: $scope.cart
     }).then(function(success) {
       console.log("REQUEST SENT : ", success)
@@ -50,6 +50,30 @@ app.controller('appController', function ($log, $sce, $timeout, $mdDialog, $scop
     $scope.cart.grandTotal = parseFloat($scope.cart.total) + parseFloat($scope.cart.tax)
   }
 
+  $scope.printReceipt = function(cart){
+    console.log("Cart: ", cart)
+    let subtotal = _(cart).sumBy('total')
+    let tax = subtotal * .086
+    let total = _(cart).sumBy('total') + tax
+    $http({
+      method: 'POST',
+      url: `http://localhost:${$scope.env.PORT}/print-receipt`,
+      data: {
+              'cart': cart,
+              'env': $scope.env,
+              'subtotal': subtotal,
+              'tax': tax,
+              'total': total
+            }
+    }).then(function successCallback (success) {
+      console.log(success)
+  
+    }, function errorCallback (error) {
+      // called asynchronously if an error occurs
+      // or server returns response with an error status.
+    })
+  }
+
   oak.on('paymentResponse', function(resObj){
     $timeout(function(){    
       $scope.paymentSent = false
@@ -58,11 +82,26 @@ app.controller('appController', function ($log, $sce, $timeout, $mdDialog, $scop
     })
   })
 
+  oak.on('env-sent',function(obj){
+        
+    $timeout(function(){
+      $scope.env = obj
+      console.log("ENVIRONMENT: ", $scope.env)
+    })
+  })
+
 
   $scope.closePaymentStatus = function(){
     $mdDialog.hide()
-    $scope.paymentStatus = paymentStatus
+    
   }
   $scope.calculateTotal()
   oak.ready()
+  $http.get('/env').then(function(success){
+    $timeout(function(){
+      $scope.env = success.data
+    })
+  }, function(error) {
+
+  })
 })
