@@ -41,7 +41,8 @@ docker-compose down
       "image": "index.docker.io/oaklabs/app-payment:latest",
       "environment": {
         "PORT": "9000",
-        "PAYMENT_PORT": "9001",
+        "PAYMENT_PORT": "8003",
+        "TERMINAL_IP": "192.168.86.43",
         "TZ": "America/Los_Angeles"
       }
     }
