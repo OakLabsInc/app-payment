@@ -119,6 +119,6 @@ async function loadWindow () {
       ]
     })
 
-    window.send('env-sent',{...process.env})
+
 
   }

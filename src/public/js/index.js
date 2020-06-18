@@ -12,6 +12,9 @@ var app = window.angular
   .config(function ($sceDelegateProvider) {
     $sceDelegateProvider.resourceUrlWhitelist(['self'])
   })
+  .run(function ($rootScope) {
+    $rootScope._ = window.lodash
+  })
 
 app.controller('appController', function ($log, $sce, $timeout, $mdDialog, $scope, $http, $window, oak, _) {
  
@@ -24,6 +27,14 @@ app.controller('appController', function ($log, $sce, $timeout, $mdDialog, $scop
   let paymentStatus = "Transaction In Progress" 
   $scope.paymentStatus = paymentStatus
 
+  $http.get('/env').then(function(success){
+    $timeout(function(){
+      $scope.env = success.data
+      console.log("ENVIRONMENT: ", $scope.env)
+    })
+  }, function(error) {
+    console.log("ERROR: ", error)
+  })
   $scope.sendCart = function(cart, ev) {
     $scope.paymentSent = true
     $mdDialog.show({
@@ -82,13 +93,6 @@ app.controller('appController', function ($log, $sce, $timeout, $mdDialog, $scop
     })
   })
 
-  oak.on('env-sent',function(obj){
-        
-    $timeout(function(){
-      $scope.env = obj
-      console.log("ENVIRONMENT: ", $scope.env)
-    })
-  })
 
 
   $scope.closePaymentStatus = function(){
@@ -96,12 +100,5 @@ app.controller('appController', function ($log, $sce, $timeout, $mdDialog, $scop
     
   }
   $scope.calculateTotal()
-  oak.ready()
-  $http.get('/env').then(function(success){
-    $timeout(function(){
-      $scope.env = success.data
-    })
-  }, function(error) {
-
-  })
+  
 })

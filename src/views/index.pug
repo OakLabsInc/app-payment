@@ -3,6 +3,10 @@ html
     title Payment Demo
     link(href='/css/angular-material.css', rel='stylesheet', type='text/css')
     link(href='/css/index.css', rel='stylesheet', type='text/css')
+    script. 
+      document.addEventListener( "DOMContentLoaded", function () {
+          oak.ready()
+        }, false )
 
   body(ng-app='demoApp')
     div(ng-controller='appController as ctl' ng-cloak)
