@@ -18,7 +18,7 @@ var app = window.angular
 
 app.controller('appController', function ($log, $sce, $timeout, $mdDialog, $scope, $http, $window, oak, _) {
  
- 
+  $scope.debug = false
   $scope.item = {}
   $scope.item.subtotal = 20.2
   $scope.item.taxRate = .085
