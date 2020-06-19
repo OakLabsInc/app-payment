@@ -49,13 +49,14 @@ function formatCurrency(price) {
   return "$" + newPrice
 }
 
-async function printReceipt (printerName, data) {
+async function printReceipt (printerName, data, cb) {
 
   let doc = new PDFDocument({margin:0});
-  let service = data.service
-  let cart = data.cart
+  let items = data.items
   let subtotal = data.subtotal
   let tax = data.tax
+  let taxRate = data.taxRate
+  let taxLabel = data.taxLabel
   let total = data.total
 
   let logoUrl = join(__dirname, "public", "images","printer-logo.png")
@@ -68,20 +69,12 @@ async function printReceipt (printerName, data) {
   emptyText(doc)
   generateImage(doc,logoUrl, 100)
   generateHr(doc)
-  for(i in cart) {
-    if(cart[i].hasOwnProperty('sale')) {
-      itemLine(doc, capitalize(cart[i].name) , cart[i].sale)
-    }else {
-      itemLine(doc, capitalize(cart[i].name) , cart[i].price)
-    }
-    
-    for(m in cart[i].modifiers) {
-      itemLine(doc,"   " + capitalize(cart[i].modifiers[m].name) + " Extra", cart[i].modifiers[m].price)
-    }
+  for(i in items) {
+    itemLine(doc, capitalize(items[i].name) , items[i].subtotal)
   }
 
   generateHr(doc)
-  itemLine(doc, "Tax 8.6%", tax)
+  itemLine(doc, `Tax ${taxLabel}`, tax)
   itemLine(doc, "Total", total)
   emptyText(doc)
   generateHr(doc)
@@ -106,7 +99,7 @@ async function printReceipt (printerName, data) {
     });
   }));
   doc.end();
-  // doc.pipe(fs.createWriteStream("receipt.pdf"));
+  cb()
 }
 
 async function getPrinterAttributes(name, cb) {

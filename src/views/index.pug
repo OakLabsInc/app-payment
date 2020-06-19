@@ -13,18 +13,24 @@ html
       md-content(layout="column" layout-align="center center" layout-fill)
         //- pre {{cart | json}}
         md-input-container
+          label Items
+          md-select(ng-model="count"  ng-change="calculateTotal()" flex)
+            md-option(ng-repeat="n in [1,2,3,4]" ng-value="n") {{n}}
+        md-divider  
+        md-input-container
           label Cart Total
-          input(ng-model="cart.total" ng-change="calculateTotal(cart.taxRate, cart.total)")
+          input(ng-model="item.subtotal" ng-change="calculateTotal()")
         md-input-container
           label Tax Rate
-          input(ng-model="cart.taxRate" ng-change="calculateTotal(cart.taxRate, cart.total)")
+          input(ng-model="item.taxRate" ng-change="calculateTotal()")
         md-input-container
           label Tax
-          input(readonly ng-model="cart.tax" ng-value="cart.tax | number:2")
+          input(readonly ng-model="item.tax" ng-value="item.tax | number:2")
         md-input-container
           label Total
-          input(readonly ng-model="cart.grandTotal" ng-value="cart.grandTotal | number:2")
-        md-button.md-primary.md-raised(ng-click="sendCart(cart, $event)") Send Cart
+          input(readonly ng-model="item.total" ng-value="item.total | number:2")
+        md-button.md-primary.md-raised(ng-click="sendCart(item, $event)") Send Cart
+        pre {{cart | json}}
       .invisible
         .md-dialog-container#transactionInProgress
           md-dialog(flex=80)

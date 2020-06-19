@@ -11,6 +11,9 @@ const _ = require('lodash')
 const app = express()
 const port = process.env.PORT ? _.toNumber(process.env.PORT) : 9000
 
+const printer = require(join(__dirname, 'print-receipt'))
+const printerName = process.env.PRINTER_NAME || "http://localhost:631/printers/TM-T88V"
+
 require('dotenv').config()
 
 let publicPath = join(__dirname, 'public')
@@ -40,7 +43,7 @@ app.get('/env', function(req, res) {
 })
 
 app.post('/sendCart', function (req, res) {
-    //console.log(req.body)
+    // This request comes from the html client-side
     let paymentPort = process.env.PAYMENT_PORT || 8003
     let paymentHost = process.env.HOST || "localhost"
     let terminalIp = process.env.TERMINAL_IP || "192.168.86.43"
@@ -57,8 +60,8 @@ app.post('/sendCart', function (req, res) {
     axios.post(`http://${paymentHost}:${paymentPort}`, request)
       .then(res => {
         console.log(`statusCode: ${res.statusCode}`)
-        console.log("paymentResponse: ", res)
-        window.send('paymentResponse', res)
+        console.log("payment-response: ", res)
+        window.send('payment-response', res)
       })
       .catch(error => {
         console.error(error)
@@ -85,14 +88,15 @@ app.post('/printer-attributes', async function(req, res) {
 
 app.post('/print-receipt', async function(req, res) {
   console.log("Print request", req.body)
-  req.body.service = service
+  req.body.service = req.body
   
   let receipt = await printer.printReceipt(printerName, req.body, function(data){
-    res.json({
+    window.send('print-response', {
       message: "Receipt Sent To Printer",
       data: data
     })
   })
+  
 })
 
 async function loadWindow () {
