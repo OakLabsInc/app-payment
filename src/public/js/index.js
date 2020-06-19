@@ -28,6 +28,20 @@ app.controller('appController', function ($log, $sce, $timeout, $mdDialog, $scop
   let paymentStatus = "Transaction In Progress" 
   $scope.paymentStatus = paymentStatus
 
+  $scope.prices = [
+    10,
+    20.2,
+    26.32,
+    40.45
+  ]
+
+  $scope.rates = [
+    .085,
+    0.09,
+    0.10,
+    0.112
+  ]
+
   $http.get('/env').then(function(success){
     $timeout(function(){
       $scope.env = success.data

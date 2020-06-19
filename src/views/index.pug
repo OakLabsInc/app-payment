@@ -12,21 +12,23 @@ html
     div(layout="column" layout-align="center center" layout-fill)
       md-content(layout="column" layout-align="start start")
         md-input-container(layout-align="start start")
-          label Items
+          label Item Count
           md-select(ng-model="count"  ng-change="calculateTotal()" style="min-width:200px")
             md-option(ng-repeat="n in [1,2,3,4]" ng-value="n") {{n}}
         md-divider  
         md-input-container
-          label Cart Total
-          input(ng-model="item.subtotal" ng-change="calculateTotal()")
+          label Item Price
+          md-select(ng-model="item.subtotal"  ng-change="calculateTotal()" style="min-width:200px")
+            md-option(ng-repeat="price in prices" ng-value="price") {{price}}
         md-input-container
           label Tax Rate
-          input(ng-model="item.taxRate" ng-change="calculateTotal()")
+          md-select(ng-model="item.taxRate"  ng-change="calculateTotal()" style="min-width:200px")
+            md-option(ng-repeat="rate in rates" ng-value="rate") {{rate}}
         md-input-container
-          label Tax
+          label Item Tax
           input(readonly ng-model="item.tax" ng-value="item.tax | number:2")
         md-input-container
-          label Total
+          label Item Total
           input(readonly ng-model="item.total" ng-value="item.total | number:2")
         md-button.md-primary.md-raised(ng-click="sendCart(item, $event)") Send Cart
         md-input-container
