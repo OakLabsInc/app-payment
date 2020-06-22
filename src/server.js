@@ -18,14 +18,20 @@ require('dotenv').config()
 
 let publicPath = join(__dirname, 'public')
 let viewsPath = join(__dirname, 'views')
-console.log(process.env.TZ)
+
+// use Pug and Stylus to render the html and css
+// https://pugjs.org/api/getting-started.html
+// https://stylus-lang.com/docs/
 app.set('views', viewsPath)
 app.set('view engine', 'pug')
 app.use(stylus.middleware({
     src: viewsPath,
     dest: join(publicPath, 'css')
 }))
+
+// bodyParsor is required to parse incoming json
 app.use(bodyParser.json());
+
 app.use(express.static(publicPath))
 
 app.listen(port, function () {
@@ -38,7 +44,7 @@ app.get('/', function (req, res) {
 
 app.get('/env', function(req, res) {
   let env = {...process.env}
-  console.log("ENV: ", env)
+  //console.log("ENV: ", env)
   res.json(env)
 })
 
@@ -47,8 +53,12 @@ app.post('/sendCart', function (req, res) {
     let paymentPort = process.env.PAYMENT_PORT || 8003
     let paymentHost = process.env.HOST || "localhost"
     let terminalIp = process.env.TERMINAL_IP || "192.168.86.43"
+
+    let payload = convertValuesToStringsDeep(req.body)
+
+    console.log(JSON.stringify(payload, null, 2))
    
-    axios.post(`http://${paymentHost}:${paymentPort}`, convertValuesToStringsDeep(req.body))
+    axios.post(`http://${paymentHost}:${paymentPort}`, payload)
       .then(res => {
         console.log(`statusCode: ${res.statusCode}`)
         console.log("payment-response: ", res)
@@ -59,7 +69,7 @@ app.post('/sendCart', function (req, res) {
       })
   res.json({
     message: "Object Sent to payment component",
-    cart: convertValuesToStringsDeep(req.body)
+    cart: payload
   })
 
     
