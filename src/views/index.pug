@@ -24,16 +24,10 @@ html
           label Tax Rate
           md-select(ng-model="item.taxRate"  ng-change="calculateTotal()" style="min-width:200px")
             md-option(ng-repeat="rate in rates" ng-value="rate") {{rate}}
-        md-input-container
-          label Item Tax
-          input(readonly ng-model="item.tax" ng-value="item.tax | number:2")
-        md-input-container
-          label Item Total
-          input(readonly ng-model="item.total" ng-value="item.total | number:2")
         md-button.md-primary.md-raised(ng-click="sendCart(item, $event)") Send Cart
         md-input-container
           md-checkbox(readonly ng-model="debug" ) Debug
-        pre(ng-if="debug") {{cart | json}}
+        pre(ng-if="debug") {{payload | json}}
       .invisible
         .md-dialog-container#transactionInProgress
           md-dialog(flex=80)

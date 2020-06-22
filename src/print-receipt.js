@@ -53,15 +53,14 @@ async function printReceipt (printerName, data, cb) {
 
   let doc = new PDFDocument({margin:0});
   let items = data.items
-  let subtotal = data.subtotal
-  let tax = data.tax
-  let taxRate = data.taxRate
-  let taxLabel = data.taxLabel
-  let total = data.total
+  let total = data.cart.total
+  let tax = data.cart.tax
+  let taxRate = data.cart.taxRate
+  let taxLabel = parseFloat(taxRate * 100).toFixed(2) + "%"
+  let grandTotal = data.cart.grandTotal
 
   let logoUrl = join(__dirname, "public", "images","printer-logo.png")
   let qrcodeUrl = join(__dirname, "public", "images","printer-qrcode.png")
-  console.log(logoUrl, qrcodeUrl)
 
   doc.fontSize(10)
   generateHr(doc)
@@ -75,7 +74,7 @@ async function printReceipt (printerName, data, cb) {
 
   generateHr(doc)
   itemLine(doc, `Tax ${taxLabel}`, tax)
-  itemLine(doc, "Total", total)
+  itemLine(doc, "Total", grandTotal)
   emptyText(doc)
   generateHr(doc)
   generateImage(doc,qrcodeUrl, 100)

@@ -23,7 +23,7 @@ app.controller('appController', function ($log, $sce, $timeout, $mdDialog, $scop
   $scope.item.subtotal = 20.2
   $scope.item.taxRate = .085
   $scope.count = 2
-  $scope.cart = []
+  $scope.payload = {}
   $scope.paymentSent = false
   let paymentStatus = "Transaction In Progress" 
   $scope.paymentStatus = paymentStatus
@@ -46,33 +46,12 @@ app.controller('appController', function ($log, $sce, $timeout, $mdDialog, $scop
     $timeout(function(){
       $scope.env = success.data
       console.log("ENVIRONMENT: ", $scope.env)
+      $scope.calculateTotal()
     })
   }, function(error) {
     console.log("ERROR: ", error)
   })
-  $scope.sendCart = function(cart, ev) {
-    $scope.paymentSent = true
-    $mdDialog.show({
-      scope: $scope,
-      preserveScope: true,
-      contentElement: '#transactionInProgress',
-      parent: window.angular.element(document.body),
-      targetEvent: ev,
-      clickOutsideToClose: false,
-      fullscreen: false
-    })
 
-    // This sends the cart to the node side for processing
-    $http({
-      method: 'POST',
-      url: `http://localhost:${$scope.env.PORT}/sendCart`,
-      data: $scope.cart
-    }).then(function(success) {
-      console.log("REQUEST SENT : ", success)
-    }, function(error) {
-      console.log("ERROR: ", error)
-    })
-  }
   $scope.calculateTotal = function() {
     $scope.item.tax = parseFloat($scope.item.taxRate) * parseFloat($scope.item.subtotal)
     $scope.item.total = parseFloat($scope.item.subtotal) + parseFloat($scope.item.tax)
@@ -89,40 +68,50 @@ app.controller('appController', function ($log, $sce, $timeout, $mdDialog, $scop
     let tax = subtotal * $scope.item.taxRate
     let total = _(items).sumBy('subtotal') + tax
 
-    $scope.cart = {
+    $scope.payload = {
       'items': items,
-      'total': subtotal,
-      'tax': tax,
-      'taxRate': $scope.item.taxRate,
-      'grandTotal': total
+      'cart': {
+        'total': subtotal,
+        'tax': tax,
+        'taxRate': $scope.item.taxRate,
+        'grandTotal': total
+      },
+      'terminalIp': $scope.env.TERMINAL_IP
     }
  
   }
 
-  $scope.printReceipt = function(cart){
-    console.log("Cart: ", cart)
-    let items=[]
-    for(var i=0;i<$scope.items_number;i++){
-      items.push({
-        name: `Item ${i}`,
-        price: $scope.item.subtotal
-      })
-    }
-    let subtotal = _(items).sumBy('total')
-    let tax = subtotal * cart.taxRate
-    let total = _(items).sumBy('total') + tax
+  
+  $scope.sendCart = function(cart, ev) {
+    $scope.paymentSent = true
+    $mdDialog.show({
+      scope: $scope,
+      preserveScope: true,
+      contentElement: '#transactionInProgress',
+      parent: window.angular.element(document.body),
+      targetEvent: ev,
+      clickOutsideToClose: false,
+      fullscreen: false
+    })
 
+    // This sends the cart to the node side for processing
+    $http({
+      method: 'POST',
+      url: `http://localhost:${$scope.env.PORT}/sendCart`,
+      data: $scope.payload
+    }).then(function(success) {
+      console.log("REQUEST SENT : ", success)
+    }, function(error) {
+      console.log("ERROR: ", error)
+    })
+  }
+
+
+  $scope.printReceipt = function(){
     $http({
       method: 'POST',
       url: `http://localhost:${$scope.env.PORT}/print-receipt`,
-      data: {
-              'items': cart.items,
-              'env': $scope.env,
-              'subtotal': cart.total,
-              'tax': cart.tax,
-              'taxLabel': parseFloat($scope.item.taxRate * 100).toFixed(2) + "%",
-              'total': cart.grandTotal
-            }
+      data: $scope.payload
     }).then(function successCallback (success) {
       console.log(success)
   
@@ -153,6 +142,6 @@ app.controller('appController', function ($log, $sce, $timeout, $mdDialog, $scop
     $mdDialog.hide()
     $scope.paymentStatus = paymentStatus
   }
-  $scope.calculateTotal()
+
   
 })
