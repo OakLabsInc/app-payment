@@ -46,18 +46,18 @@ app.post('/sendCart', function (req, res) {
     // This request comes from the html client-side
     let paymentPort = process.env.PAYMENT_PORT || 8003
     let paymentHost = process.env.HOST || "localhost"
-    // let terminalIp = process.env.TERMINAL_IP || "192.168.86.43"
-    // let request = {
-    //   "cart": {
-    //     "total": req.body.cart.total.toString(),
-    //     "taxRate": req.body.cart.taxRate.toString(),
-    //     "tax": req.body.cart.tax.toString(),
-    //     "grandTotal": req.body.cart.grandTotal.toString()
-    //   },
-    //   "terminalIp": terminalIp
-    // }
-    // console.log(request)
-    axios.post(`http://${paymentHost}:${paymentPort}`, req.body)
+    let terminalIp = process.env.TERMINAL_IP || "192.168.86.43"
+    let request = {
+      "cart": {
+        "total": req.body.cart.total.toString(),
+        "taxRate": req.body.cart.taxRate.toString(),
+        "tax": req.body.cart.tax.toString(),
+        "grandTotal": req.body.cart.grandTotal.toString()
+      },
+      "terminalIp": terminalIp
+    }
+    console.log(request)
+    axios.post(`http://${paymentHost}:${paymentPort}`, toString(req.body))
       .then(res => {
         console.log(`statusCode: ${res.statusCode}`)
         console.log("payment-response: ", res)
@@ -68,7 +68,7 @@ app.post('/sendCart', function (req, res) {
       })
   res.json({
     message: "Object Sent to payment component",
-    cart: req.body
+    cart: toString(req.body)
   })
 
     
@@ -126,3 +126,6 @@ async function loadWindow () {
 
 
   }
+
+  function toString(obj) {
+    return _.cloneDeepWith(obj, val => val.toString());
