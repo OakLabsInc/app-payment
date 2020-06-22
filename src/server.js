@@ -68,7 +68,7 @@ app.post('/sendCart', function (req, res) {
       })
   res.json({
     message: "Object Sent to payment component",
-    cart: request
+    cart: req.body
   })
 
     
