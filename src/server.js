@@ -57,7 +57,7 @@ app.post('/sendCart', function (req, res) {
       "terminalIp": terminalIp
     }
     console.log(request)
-    axios.post(`http://${paymentHost}:${paymentPort}`, toString(req.body))
+    axios.post(`http://${paymentHost}:${paymentPort}`, convertValuesToStringsDeep(req.body))
       .then(res => {
         console.log(`statusCode: ${res.statusCode}`)
         console.log("payment-response: ", res)
@@ -68,7 +68,7 @@ app.post('/sendCart', function (req, res) {
       })
   res.json({
     message: "Object Sent to payment component",
-    cart: toString(req.body)
+    cart: convertValuesToStringsDeep(req.body)
   })
 
     
@@ -127,6 +127,8 @@ async function loadWindow () {
 
   }
 
-  function toString(obj) {
-    return _.cloneDeepWith(obj, val => val.toString());
+  function convertValuesToStringsDeep(obj) {
+    return _.cloneDeepWith(obj, value => {
+      return !_.isPlainObject(value) ? _.toString(value) : undefined;
+    });
   }
