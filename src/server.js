@@ -49,15 +49,15 @@ app.post('/sendCart', function (req, res) {
     let terminalIp = process.env.TERMINAL_IP || "192.168.86.43"
     let request = {
       "cart": {
-        "total": req.body.total.toString(),
-        "taxRate": req.body.taxRate.toString(),
-        "tax": req.body.tax.toString(),
-        "grandTotal": req.body.grandTotal.toString()
+        "total": req.body.cart.total.toString(),
+        "taxRate": req.body.cart.taxRate.toString(),
+        "tax": req.body.cart.tax.toString(),
+        "grandTotal": req.body.cart.grandTotal.toString()
       },
       "terminalIp": terminalIp
     }
     // console.log(request)
-    axios.post(`http://${paymentHost}:${paymentPort}`, request)
+    axios.post(`http://${paymentHost}:${paymentPort}`, req.body)
       .then(res => {
         console.log(`statusCode: ${res.statusCode}`)
         console.log("payment-response: ", res)
