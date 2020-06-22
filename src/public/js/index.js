@@ -98,7 +98,7 @@ app.controller('appController', function ($log, $sce, $timeout, $mdDialog, $scop
     $http({
       method: 'POST',
       url: `http://localhost:${$scope.env.PORT}/sendCart`,
-      data: $scope.payload
+      data: angular.toJson($scope.payload)
     }).then(function(success) {
       console.log("REQUEST SENT : ", success)
     }, function(error) {
@@ -111,7 +111,7 @@ app.controller('appController', function ($log, $sce, $timeout, $mdDialog, $scop
     $http({
       method: 'POST',
       url: `http://localhost:${$scope.env.PORT}/print-receipt`,
-      data: $scope.payload
+      data:  angular.toJson($scope.payload)
     }).then(function successCallback (success) {
       console.log(success)
   
