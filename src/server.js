@@ -129,3 +129,4 @@ async function loadWindow () {
 
   function toString(obj) {
     return _.cloneDeepWith(obj, val => val.toString());
+  }
