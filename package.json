@@ -27,7 +27,7 @@
   },
   "dependencies": {
     "@oaklabs/platform": "~4.0.0",
-    "angular": "~1.7.2",
+    "angular": "~1.8.0",
     "angular-animate": "~1.7.2",
     "angular-aria": "~1.7.5",
     "angular-material": "~1.1.22",
