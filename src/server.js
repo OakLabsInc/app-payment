@@ -14,11 +14,17 @@ const port = process.env.PORT ? _.toNumber(process.env.PORT) : 9000
 const printer = require(join(__dirname, 'print-receipt'))
 const printerName = process.env.PRINTER_NAME || "http://localhost:631/printers/TM-T88V"
 
-require('dotenv').config()
+process.env.NODE_ENV = 'local'
+
+if(process.env.NODE_ENV === 'local') {
+  require('dotenv').config()
+  console.log('ENV: ', process.env)
+}
 
 let publicPath = join(__dirname, 'public')
 let viewsPath = join(__dirname, 'views')
 
+console.log('VERSIONS: ', process.versions)
 // use Pug and Stylus to render the html and css
 // https://pugjs.org/api/getting-started.html
 // https://stylus-lang.com/docs/

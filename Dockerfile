@@ -1,4 +1,4 @@
-FROM oaklabs/oak:5.0.10
+FROM oaklabs/oak:6.0.1
 
 WORKDIR /app
 
@@ -9,6 +9,8 @@ RUN npm install --production && npm cache clean --force
 COPY . /app
 
 CMD ["/app/src/server.js"]
+
+EXPOSE 9000
 
 ENV TZ=America/Los_Angeles \
     PAYMENT_PORT=8003 \
