@@ -1,7 +1,8 @@
 # Payment Demo Application
 
-Application for OakOS v5.0.X
+Example Application for OakOS v5.0.X
 
+> Not for production use!
 
 ## Running locally
 
